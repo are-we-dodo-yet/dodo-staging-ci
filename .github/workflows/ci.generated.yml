@@ -248,11 +248,11 @@ jobs:
         if: '(contains(github.event.pull_request.labels.*.name, ''ci-bench'') || github.ref == ''refs/heads/main'') && !startsWith(github.ref, ''refs/tags/'')'
         run: cargo bench -p bench_tests --bench deno_bench --locked
       - name: Convert benchmarks for github-action-benchmark
-        if: '!startsWith(github.ref, ''refs/tags/'') && github.repository == ''are-we-dodo-yet/dodo'' && github.ref == ''refs/heads/main'''
+        if: '!startsWith(github.ref, ''refs/tags/'') && (github.repository == ''are-we-dodo-yet/dodo'' || github.repository == ''are-we-dodo-yet/dodo-staging-ci'') && github.ref == ''refs/heads/main'''
         run: ./target/release/deno run --allow-read --allow-write ./tools/build_benchmark_jsons.ts target/release/bench.json target/bench_results
       - name: Upload artifact bench-results
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        if: '!startsWith(github.ref, ''refs/tags/'') && github.repository == ''are-we-dodo-yet/dodo'' && github.ref == ''refs/heads/main'''
+        if: '!startsWith(github.ref, ''refs/tags/'') && (github.repository == ''are-we-dodo-yet/dodo'' || github.repository == ''are-we-dodo-yet/dodo-staging-ci'') && github.ref == ''refs/heads/main'''
         with:
           name: bench-results
           path: target/bench_results
@@ -278,7 +278,7 @@ jobs:
     name: bench publish
     needs:
       - bench
-    if: github.repository == 'are-we-dodo-yet/dodo' && github.ref == 'refs/heads/main'
+    if: (github.repository == 'are-we-dodo-yet/dodo' || github.repository == 'are-we-dodo-yet/dodo-staging-ci') && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     concurrency:
       group: '${{ github.workflow }}-bench-publish'

@@ -35,7 +35,7 @@ const macosArmRunner = "macos-14";
 
 // shared conditions
 const isDenoland = conditions.isRepository("denoland/deno");
-const isDodo = conditions.isRepository("are-we-dodo-yet/dodo");
+const isDodo = conditions.isRepository("are-we-dodo-yet/dodo").or(conditions.isRepository("are-we-dodo-yet/dodo-staging-ci"));
 const isMainBranch = conditions.isBranch("main");
 const isTag = conditions.isTag();
 const isNotTag = isTag.not();
